@@ -111,7 +111,7 @@ const Messages = forwardRef(({ messages, onIsAtBottomChange }: any, ref) => {
                 </div>
                 {!message.isUser && (
                   <button type="button" className="cursor-pointer" onClick={() => copyToClipboard(message.content, `message-${index}`)}>
-                    {copiedMessage === `message-${index}` ? <Check additionalClasses="stroke-black stroke-2" /> : <Copy additionalClasses="" />}
+                    {copiedMessage === `message-${index}` ? <Check additionalClasses="stroke-black stroke-2" /> : <Copy additionalClasses="stroke-black" />}
                   </button>
                 )}
               </div>

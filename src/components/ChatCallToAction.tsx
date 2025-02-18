@@ -19,9 +19,9 @@ import Check from "./icons/Check";
 import Loader from "./icons/Loader";
 import AudioSpectrum from "./AudioSpectrum";
 import { DisplayModeMenu } from "./DisplayModeMenu";
-import Microphone from "./icons/Microphone";
 import { Tooltip } from "./Tooltip";
 import Robot from "./icons/Robot";
+import MessageLengthCalculator from "./MessageLengthCalculator";
 
 const sentances = [
   "Optimize your container routes.",
@@ -62,6 +62,8 @@ export default function ChatCallToAction() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [userPrompt, setUserPrompt] = useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [loginModalOpen, setLoginModalOpen] = useState<boolean>(false);
+  const [touchStartY, setTouchStartY] = useState<number>(0);
   const [disabled, setDisabled] = useState<boolean>(false);
   const [showBubble, setShowBubble] = useState<boolean>(false);
   const [swipeOffset, setSwipeOffset] = useState<number>(0);
@@ -76,6 +78,7 @@ export default function ChatCallToAction() {
   const [paused, setPaused] = useState<boolean>(false);
   const [audioStream, setAudioStream] = useState<MediaStream | null>(null);
   const [displayMode, setDisplayMode] = useState(MODES.MODAL);
+  const [remainingChars, setRemainingChars] = useState<number>(1000);
 
   const { index, progress, elapsed, typedTime, pauseTime, deleteTime } = TypeWriterController({
     texts: sentances,
@@ -92,10 +95,10 @@ export default function ChatCallToAction() {
   const sentance = sentances[index];
   const text = getDisplayedText(sentance, elapsed, typedTime, pauseTime, deleteTime);
 
-  const [loginModalOpen, setLoginModalOpen] = useState<boolean>(false);
-  const [touchStartY, setTouchStartY] = useState<number>(0);
   const touchStartX = useRef<number>(0);
   const visibilityThreshold = 20;
+
+  const maxLength = 1000;
 
   const handleChatClick = () => {
     if (!isAuthenticated) {
@@ -327,7 +330,15 @@ export default function ChatCallToAction() {
 
       const result = await response.json();
       if (result.text && result.text.trim() !== "you" && result.text.trim().length > 0) {
-        setUserPrompt(prev => `${prev} ${result.text}`.trim());
+        setUserPrompt(prev => {
+          const maxLength = 1000;
+          const newText = `${prev} ${result.text}`.trim();
+          const finalText = newText.length > maxLength ? newText.substring(0, maxLength) : newText;
+
+          setRemainingChars(maxLength - finalText.length);
+
+          return finalText;
+        });
       }
 
       setRecording(false);
@@ -391,8 +402,11 @@ export default function ChatCallToAction() {
             [clsx("w-[60%] max-w-[750px] relative", "transform-gpu translate3d(0,0,0)", "max-lg:w-full max-md:h-screen max-md:rounded-none")]:
               displayMode === MODES.MODAL,
 
-            [clsx("w-[80%] max-w-[1200px] h-[80%] relative", "transform-gpu translate3d(0,0,0)", "max-lg:w-full max-lg:h-full max-lg:rounded-none")]:
-              displayMode === MODES.MAXIMIZED,
+            [clsx(
+              "w-[80%] max-w-[1200px] h-[80%] relative md:pb-[24px]",
+              "transform-gpu translate3d(0,0,0)",
+              "max-lg:w-full max-lg:h-full max-lg:rounded-none"
+            )]: displayMode === MODES.MAXIMIZED,
 
             [clsx(
               "w-[25%] h-full fixed right-0 top-0",
@@ -479,10 +493,11 @@ export default function ChatCallToAction() {
             )}
           </div>
 
-          <div className="flex items-end justify-center px-6 max-md:px-3 md:min-h-[140px] w-full flex-col gap-y-2 pb-4 pt-[12px] border-t border-outline-primary bg-white relative z-100">
+          <div className={clsx("flex items-end justify-center px-6 max-md:px-3 md:min-h-[140px] w-full flex-col gap-y-2 pb-6 max-md:pb-3 pt-[12px] max-md:border-t border-outline-primary max-md:bg-white relative z-100", {
+          })}>
             {recording ? (
               <>
-                <div className="flex items-center justify-center w-full h-[70px]">
+                <div className="flex items-center justify-center w-full h-[70px] md:p-3 md:bg-white md:rounded-[10px] md:border md:border-outline-primary">
                   <div className="w-[15%] flex items-center justify-start">
                     <button
                       type="button"
@@ -495,7 +510,7 @@ export default function ChatCallToAction() {
                       <span className="w-[10px] bg-black h-[2px] rounded-full -rotate-45 absolute"></span>
                     </button>
                   </div>
-                  <div className="w-[60%] bg-black">
+                  <div className="w-[60%]">
                     <AudioSpectrum stream={audioStream} />
                   </div>
                   <div className="w-[16%] flex items-center justify-center">
@@ -516,13 +531,14 @@ export default function ChatCallToAction() {
                 </div>
               </>
             ) : (
-              <div className="flex flex-col items-start justify-center w-full gap-x-2">
-                <div className="w-full flex items-start gap-x-2">
+              <div className="flex flex-col items-start justify-center w-full gap-x-2 bg-white md:outline-1 md:outline-outline-primary rounded-[10px]">
+                <div className="w-full flex items-start gap-x-2 overflow-y-hidden">
                   <AutoResizeTextarea
                     value={userPrompt}
                     onValueChange={t => setUserPrompt(t)}
                     onSubmit={handleSubmit}
                     onHeightChange={(height: number) => setTextareaHeight(height)}
+                    onCharCountChange={setRemainingChars}
                   />
                   {textareaHeight >= 80 && (
                     <button
@@ -540,53 +556,65 @@ export default function ChatCallToAction() {
                       disabled={disabled}
                       onValueChange={setUserPrompt}
                       onSubmit={handleSubmit}
+                      onCharCountChange={setRemainingChars}
+                      remainingChars={remainingChars}
                       onClose={() => setMaximized(false)}
                     />
                   )}
                 </div>
-                <div className="w-full flex justify-end items-center gap-x-2">
-                  <VoiceInput onRecording={startRecording} />
-                  <button
-                    type="button"
-                    disabled={!generating && !userPrompt.trim()}
-                    className={clsx(
-                      "min-w-[32px] min-h-[32px] md:hidden rounded-full outline outline-outline-primary flex items-center justify-center bg-black",
-                      !generating && !userPrompt.trim() && "opacity-10 cursor-not-allowed"
-                    )}
-                    onClick={generating ? handleStopGeneration : handleSubmit}>
-                    {generating ? (
-                      <Stop width={18} height={18} additionalClasses="stroke-white fill-white" />
-                    ) : (
-                      <Arrow additionalClasses="stroke-white stroke-3 rotate-90" width={18} height={18} />
-                    )}
-                  </button>
+                <div className="max-md:hidden w-full h-[50px] px-4 flex items-center justify-between">
+                  <MessageLengthCalculator remainingChars={remainingChars} />
+                  <div
+                    className={clsx("flex items-center justify-center gap-x-2", {
+                      hidden: recording,
+                    })}>
+                    <Tooltip text="Use voice mode">
+                      <VoiceInput onRecording={startRecording} />
+                    </Tooltip>
+                    <button
+                      type="button"
+                      disabled={!generating && !userPrompt.trim()}
+                      className={clsx(
+                        "min-w-[32px] min-h-[32px] rounded-full outline outline-outline-primary flex items-center justify-center bg-black",
+                        !generating && !userPrompt.trim() && "opacity-10 cursor-not-allowed"
+                      )}
+                      onClick={generating ? handleStopGeneration : handleSubmit}>
+                      {generating ? (
+                        <Stop width={18} height={18} additionalClasses="stroke-white fill-white" />
+                      ) : (
+                        <Arrow additionalClasses="stroke-white stroke-3 rotate-90" width={18} height={18} />
+                      )}
+                    </button>
+                  </div>
+                </div>
+                <div className="w-full flex md:hidden justify-between items-center">
+                  <div
+                    className={clsx("text-sm font-semibold", {
+                      "text-red-400": remainingChars <= 25,
+                      "text-chat-text-primary": remainingChars >= 0,
+                    })}>
+                    {remainingChars}
+                  </div>
+                  <div className="flex gap-x-2">
+                    <VoiceInput onRecording={startRecording} />
+                    <button
+                      type="button"
+                      disabled={!generating && !userPrompt.trim()}
+                      className={clsx(
+                        "min-w-[32px] min-h-[32px] md:hidden rounded-full outline outline-outline-primary flex items-center justify-center bg-black",
+                        !generating && !userPrompt.trim() && "opacity-10 cursor-not-allowed"
+                      )}
+                      onClick={generating ? handleStopGeneration : handleSubmit}>
+                      {generating ? (
+                        <Stop width={18} height={18} additionalClasses="stroke-white fill-white" />
+                      ) : (
+                        <Arrow additionalClasses="stroke-white stroke-3 rotate-90" width={18} height={18} />
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
-            <div
-              className={clsx("flex items-center justify-center gap-x-2", {
-                hidden: recording,
-              })}>
-              <Tooltip text="Start voice recording">
-                <Button
-                  type="submit"
-                  variant="default"
-                  label=""
-                  rightIcon={<Microphone width={18} height={18} additionalClasses="fill-white" />}
-                  additionalClasses="max-md:hidden h-[40px] px-4 text-sm font-bold rounded-[10px] transition-color duration-300 outline-none"
-                  onClick={startRecording}
-                />
-              </Tooltip>
-              <Button
-                disabled={!generating && !userPrompt.trim()}
-                type="submit"
-                label={generating ? "" : "Send"}
-                variant="default"
-                rightIcon={generating && <Stop width={18} height={18} additionalClasses="stroke-white fill-white" />}
-                additionalClasses="max-md:hidden h-[40px] px-4 text-sm font-bold rounded-[10px] transition-color duration-300 outline-none"
-                onClick={generating ? handleStopGeneration : handleSubmit}
-              />
-            </div>
           </div>
         </Modal>
       )}

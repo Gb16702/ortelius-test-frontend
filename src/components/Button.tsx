@@ -11,6 +11,12 @@ const buttonVariants: Record<ButtonProperties["variant"], ButtonVariantStyle> = 
     cursor: "cursor-pointer",
   },
 
+  black: {
+    backgroundColor: "bg-black",
+    color: "text-white",
+    cursor: "cursor-pointer",
+  },
+
   disabled: {
     backgroundColor: "bg-button-primary/[.10]",
     color: "text-white",

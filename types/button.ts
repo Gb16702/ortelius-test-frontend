@@ -6,7 +6,7 @@ export interface ButtonProperties extends ButtonHTMLAttributes<HTMLButtonElement
   label: string
   loading?: boolean
   type: "button" | "reset" | "submit"
-  variant: "default" | "disabled" | "custom"
+  variant: "default" | "black" | "disabled" | "custom"
   rightIcon?: JSX.Element | boolean
   onClick?: () => void
 }

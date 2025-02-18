@@ -1,25 +1,33 @@
-import { ChangeEvent, useEffect, useRef } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 type Props = {
   value: string;
+  maxLength?: number;
   onValueChange?: (val: string) => void;
   onSubmit?: () => void;
   onHeightChange?: (height: number) => void;
+  onCharCountChange?: (count: number) => void;
 };
 
-export default function AutoResizeTextarea({ value, onValueChange, onSubmit, onHeightChange }: Props) {
+export default function AutoResizeTextarea({ value, maxLength = 1000, onCharCountChange, onValueChange, onSubmit, onHeightChange }: Props) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth < 768);
 
-  const adjustHeight = () => {
+  useEffect(() => {
+    if (!isMobile || !textareaRef.current) return;
+
     const textarea = textareaRef.current;
-    if (!textarea) return;
-
     textarea.style.height = "auto";
-    const newHeight = textarea.scrollHeight;
-    textarea.style.height = `${newHeight}px`;
+    textarea.style.height = `${textarea.scrollHeight}px`;
 
-    onHeightChange?.(newHeight);
-  };
+    onHeightChange?.(textarea.scrollHeight);
+  }, [value, isMobile]);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === "Enter" && !event.shiftKey) {
@@ -29,30 +37,28 @@ export default function AutoResizeTextarea({ value, onValueChange, onSubmit, onH
   };
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    onValueChange?.(event.target.value);
-    adjustHeight();
+    const newText = event.target.value;
+
+    if (newText.length <= maxLength) {
+      onValueChange?.(newText);
+      onCharCountChange?.(maxLength - newText.length);
+    }
   };
 
-  useEffect(() => {
-    adjustHeight();
-  }, [value]);
-
   return (
-    <div className="w-[90%] md:w-full bg-white md:bg-whitish md:outline-1 md:outline-outline-primary focus-within:outline-button-primary transition md:duration-300 rounded-[10px]">
+    <div className="w-[90%] md:w-full md:h-[100px] bg-white focus-within:outline-button-primary transition md:duration-300">
       <textarea
         ref={textareaRef}
         aria-label="Type a message"
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         spellCheck={false}
+        maxLength={maxLength}
+        required
         rows={1}
-        className="w-full md:px-4 py-2 resize-none placeholder:text-placeholder-primary outline-none text-black min-h-[40px] max-h-[80px] overflow-y-auto leading-5"
+        className="w-full md:px-3 py-2 md:py-3 resize-none placeholder:text-placeholder-primary outline-none text-black max-lg:max-h-[80px] md:min-h-full overflow-y-auto leading-5"
         placeholder="Tell me about maritime logistics..."
         value={value}
-        style={{
-          height: "auto",
-          overflowY: "hidden",
-        }}
       />
     </div>
   );
