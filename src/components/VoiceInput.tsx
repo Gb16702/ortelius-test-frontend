@@ -7,11 +7,9 @@ const VoiceInput: FC<any> = ({ onRecording }) => {
     <>
       <button
         type="button"
-        className={clsx(
-          "min-w-[32px] min-h-[32px] md:hidden rounded-full outline outline-outline-primary flex items-center justify-center cursor-pointer"
-        )}
+        className={clsx("min-w-[32px] min-h-[32px] md:hidden rounded-full flex items-center justify-center cursor-pointer")}
         onClick={onRecording}>
-        <Microphone className="fill-black stroke-4" width={18} height={18} />
+        <Microphone additionalClasses="fill-black stroke-4" width={18} height={18} />
       </button>
     </>
   );

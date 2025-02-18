@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import type { EyesProperties } from "@/types/eyes";
+import type { EyesProperties } from "@/types/icon";
 
 export const Eyes: FC<EyesProperties> = ({ additionalClasses, width = 14, height = 14, type }) => {
   return (

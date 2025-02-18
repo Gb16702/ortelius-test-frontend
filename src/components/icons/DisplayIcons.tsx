@@ -1,12 +1,7 @@
 import type { FC } from "react";
+import type { IconProperties } from "@/types/icon";
 
-interface DisplayIconsProperties {
-  width: number;
-  height: number;
-  additionalClasses?: string;
-}
-
-export const FullscreenModeIcon: FC<DisplayIconsProperties> = ({ width = 14, height = 14, additionalClasses }) => {
+export const FullscreenModeIcon: FC<IconProperties> = ({ width = 14, height = 14, additionalClasses }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -27,7 +22,7 @@ export const FullscreenModeIcon: FC<DisplayIconsProperties> = ({ width = 14, hei
   );
 };
 
-export const ModalModeIcon: FC<DisplayIconsProperties> = ({ width = 14, height = 14, additionalClasses }) => {
+export const ModalModeIcon: FC<IconProperties> = ({ width = 14, height = 14, additionalClasses }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +41,7 @@ export const ModalModeIcon: FC<DisplayIconsProperties> = ({ width = 14, height =
   );
 };
 
-export const SidebarModeIcon: FC<DisplayIconsProperties> = ({ width = 14, height = 14, additionalClasses }) => {
+export const SidebarModeIcon: FC<IconProperties> = ({ width = 14, height = 14, additionalClasses }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

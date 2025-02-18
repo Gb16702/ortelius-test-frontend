@@ -1,7 +1,7 @@
-import type { ArrowProperties } from "@/types/arrow";
+import type { IconProperties } from "@/types/icon";
 import type { FC } from "react";
 
-const Arrow: FC<ArrowProperties> = ({ width = 14, height = 14, additionalClasses = "" }) => {
+const Arrow: FC<IconProperties> = ({ width = 14, height = 14, additionalClasses = "" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

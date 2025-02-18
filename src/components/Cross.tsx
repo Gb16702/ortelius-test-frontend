@@ -1,7 +1,4 @@
-import type { FC } from "react";
-import type { CrossProperties } from "@/types/cross";
-
-export const Cross: FC<CrossProperties> = ({ onClick }) => {
+export const Cross = ({ onClick }: { onClick: () => void }) => {
   return (
     <>
       <button

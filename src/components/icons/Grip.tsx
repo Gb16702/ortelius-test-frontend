@@ -1,12 +1,7 @@
+import { IconProperties } from "@/types/icon";
 import { FC } from "react";
 
-interface GripProperties {
-  width: number;
-  height: number;
-  additionalClasses?: string;
-}
-
-const Grip: FC<GripProperties> = ({ width = 14, height = 14, additionalClasses }) => {
+const Grip: FC<IconProperties> = ({ width = 14, height = 14, additionalClasses }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

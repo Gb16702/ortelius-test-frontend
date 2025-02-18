@@ -46,8 +46,8 @@ export default function AutoResizeTextarea({ value, onValueChange, onSubmit, onH
         onKeyDown={handleKeyDown}
         spellCheck={false}
         rows={1}
-        className="w-full md:px-4 py-2 resize-none placeholder:text-placeholder-primary outline-none text-chat-text-primary min-h-[40px] max-h-[80px] overflow-y-auto leading-5"
-        placeholder="Message to OrteliusAI"
+        className="w-full md:px-4 py-2 resize-none placeholder:text-placeholder-primary outline-none text-black min-h-[40px] max-h-[80px] overflow-y-auto leading-5"
+        placeholder="Tell me about maritime logistics..."
         value={value}
         style={{
           height: "auto",

@@ -1,9 +1,9 @@
 import type { FC } from "react";
-import type { MicrophoneProperties } from "@/types/microphone";
+import { IconProperties } from "@/types/icon";
 
-const Microphone: FC<MicrophoneProperties> = ({ className, width = 14, height = 14 }) => {
+const Microphone: FC<IconProperties> = ({ additionalClasses, width = 14, height = 14 }) => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 73 108" fill="none" className={className}>
+    <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 73 108" fill="none" className={additionalClasses}>
       <path
         d="M36.5 0C30.9912 0 25.708 2.19245 21.8127 6.09504C17.9174 9.99764 15.729 15.2907 15.729 20.8098V51.3325C15.729 56.8516 17.9174 62.1446 21.8127 66.0472C25.708 69.9498 30.9912 72.1423 36.5 72.1423C42.0088 72.1423 47.2919 69.9498 51.1872 66.0472C55.0826 62.1446 57.2709 56.8516 57.2709 51.3325V20.8098C57.2709 15.2907 55.0826 9.99764 51.1872 6.09504C47.2919 2.19245 42.0088 0 36.5 0ZM50.3473 51.3325C50.3473 55.0119 48.8884 58.5406 46.2915 61.1423C43.6946 63.744 40.1725 65.2057 36.5 65.2057C32.8274 65.2057 29.3053 63.744 26.7084 61.1423C24.1116 58.5406 22.6527 55.0119 22.6527 51.3325V20.8098C22.6527 17.1304 24.1116 13.6017 26.7084 11C29.3053 8.39823 32.8274 6.93659 36.5 6.93659C40.1725 6.93659 43.6946 8.39823 46.2915 11C48.8884 13.6017 50.3473 17.1304 50.3473 20.8098V51.3325Z"
       />

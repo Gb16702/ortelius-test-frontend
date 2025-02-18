@@ -1,5 +1,5 @@
 import { useState, useEffect, type FC } from "react";
-import type { TypeWriterProps } from "@/types/typewriter";
+import type { TypeWriterProps } from "../../types/typeWriter";
 
 const TypeWriter: FC<TypeWriterProps> = ({ texts, typingSpeed = 100, deletingSpeed = 50, pauseTime = 1000, onProgressChange }) => {
   const [currentText, setCurrentText] = useState<string>("");

@@ -21,6 +21,7 @@ import AudioSpectrum from "./AudioSpectrum";
 import { DisplayModeMenu } from "./DisplayModeMenu";
 import Microphone from "./icons/Microphone";
 import { Tooltip } from "./Tooltip";
+import Robot from "./icons/Robot";
 
 const sentances = [
   "Optimize your container routes.",
@@ -182,6 +183,7 @@ export default function ChatCallToAction() {
               const json = line.replace("data:", "").trim();
               if (json === "[DONE]") {
                 setGenerating(false);
+                generatingRef.current = false;
                 return;
               }
 
@@ -226,11 +228,10 @@ export default function ChatCallToAction() {
         },
       ]);
     } finally {
-      if (generating) {
-        setGenerating(false);
-        setDisabled(false);
-        setMessagesLoading(false);
-      }
+      generatingRef.current = false;
+      setGenerating(false);
+      setDisabled(false);
+      setMessagesLoading(false);
     }
   };
 
@@ -414,7 +415,7 @@ export default function ChatCallToAction() {
               }}>
               <Arrow additionalClasses="stroke-black stroke-2" width={18} height={18} />
             </button>
-            <h3 className="font-semibold w-[calc(50%+(80.53px/2))]">OrteliusAI</h3>
+            <h3 className="font-semibold w-[calc(50%+(70.53px/2))]">OrteliusAI</h3>
             <div className="max-md:hidden ">
               <Cross
                 onClick={() => {
@@ -434,9 +435,14 @@ export default function ChatCallToAction() {
             <DisplayModeMenu onModeChange={setDisplayMode} displayMode={displayMode} />
             <div className="w-full overflow-y-auto px-6 max-md:px-3 py-4 flex flex-col gap-y-4">
               <div className="w-full rounded-[10px] outline outline-outline-primary bg-white p-3">
-                <h3 className="font-medium text-black">OrteliusAI</h3>
-                <p className="font-medium text-chat-text-primary pt-2 text-sm">
-                  Hello, I'm OrteliusAI. I can help <span className="text-black">plan routes</span>, compare{" "}
+                <div className="flex gap-x-1.5 items-center justify-start">
+                  <Robot width={14} height={14} additionalClasses="fill-black stroke-2" />
+                  <h3 className="font-medium text-sm text-black">
+                    <span className="font-bold text-xs">Ortelius AI</span>
+                  </h3>
+                </div>
+                <p className="font-medium text-chat-text-primary pt-3 text-sm">
+                  Hello, I'm Ortelius AI. I can help <span className="text-black">plan routes</span>, compare{" "}
                   <span className="text-black">shipping costs</span>, clarify <span className="text-black">Incoterms</span>, and handle a variety of
                   other <span className="text-black">maritime-related</span> tasks. Let me know how I can assist you !
                 </p>
@@ -473,7 +479,7 @@ export default function ChatCallToAction() {
             )}
           </div>
 
-          <div className="flex items-end justify-center px-6 max-md:px-3 md:min-h-[140px] w-full flex-col gap-y-2 pb-4 pt-[12px] max-md:shadow-[0px_-2px_8px_0px_] shadow-[#e8e8e8] max-md:rounded-[24px_24px_0_0] bg-white md:border-t border-outline-primary relative z-100">
+          <div className="flex items-end justify-center px-6 max-md:px-3 md:min-h-[140px] w-full flex-col gap-y-2 pb-4 pt-[12px] border-t border-outline-primary bg-white relative z-100">
             {recording ? (
               <>
                 <div className="flex items-center justify-center w-full h-[70px]">
@@ -544,8 +550,8 @@ export default function ChatCallToAction() {
                     type="button"
                     disabled={!generating && !userPrompt.trim()}
                     className={clsx(
-                      "min-w-[32px] min-h-[32px] md:hidden rounded-full outline outline-outline-primary flex items-center justify-center bg-button-primary",
-                      !generating && !userPrompt.trim() && "opacity-15 cursor-not-allowed"
+                      "min-w-[32px] min-h-[32px] md:hidden rounded-full outline outline-outline-primary flex items-center justify-center bg-black",
+                      !generating && !userPrompt.trim() && "opacity-10 cursor-not-allowed"
                     )}
                     onClick={generating ? handleStopGeneration : handleSubmit}>
                     {generating ? (
@@ -566,7 +572,7 @@ export default function ChatCallToAction() {
                   type="submit"
                   variant="default"
                   label=""
-                  rightIcon={<Microphone width={18} height={18} className="fill-white" />}
+                  rightIcon={<Microphone width={18} height={18} additionalClasses="fill-white" />}
                   additionalClasses="max-md:hidden h-[40px] px-4 text-sm font-bold rounded-[10px] transition-color duration-300 outline-none"
                   onClick={startRecording}
                 />

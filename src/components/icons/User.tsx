@@ -1,7 +1,7 @@
 import { IconProperties } from "@/types/icon";
-import type { FC } from "react";
+import { FC } from "react";
 
-const Maximize: FC<IconProperties> = ({ width = 24, height = 24, additionalClasses }) => {
+const User: FC<IconProperties> = ({ width = 16, height = 16, additionalClasses }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,12 +14,10 @@ const Maximize: FC<IconProperties> = ({ width = 24, height = 24, additionalClass
       strokeLinecap="round"
       strokeLinejoin="round"
       className={additionalClasses}>
-      <polyline points="15 3 21 3 21 9" />
-      <polyline points="9 21 3 21 3 15" />
-      <line x1="21" x2="14" y1="3" y2="10" />
-      <line x1="3" x2="10" y1="21" y2="14" />
+      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
     </svg>
   );
 };
 
-export default Maximize;
+export default User;

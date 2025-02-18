@@ -1,7 +1,7 @@
 import type { FC } from "react";
-import type { CheckProperties } from "@/types/check";
+import type { IconProperties } from "@/types/icon";
 
-const Check: FC<CheckProperties> = ({ width = 16, height = 16, additionalClasses }) => {
+const Check: FC<IconProperties> = ({ width = 16, height = 16, additionalClasses }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

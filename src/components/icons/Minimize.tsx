@@ -1,12 +1,7 @@
+import { IconProperties } from "@/types/icon";
 import type { FC } from "react";
 
-interface MinimizeProps {
-  width?: number;
-  height?: number;
-  additionalClasses?: string;
-}
-
-const Minimize: FC<MinimizeProps> = ({ width = 24, height = 24, additionalClasses }) => {
+const Minimize: FC<IconProperties> = ({ width = 24, height = 24, additionalClasses }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
