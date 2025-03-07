@@ -4,12 +4,15 @@ import Loader from "./icons/Loader";
 import clsx from "clsx";
 import Minimize from "./icons/Minimize";
 import MessageLengthCalculator from "./MessageLengthCalculator";
+import Credits from "./Credits";
+import { User } from "../stores/userStore";
 
 interface MaximizedTextAreaProps {
   value: string;
   disabled?: boolean;
   maxLength?: number;
   remainingChars: number;
+  user: User;
   onValueChange: (value: string) => void;
   onSubmit: () => void;
   onCharCountChange: (count: number) => void;
@@ -21,6 +24,7 @@ const MaximizedTextArea: FC<MaximizedTextAreaProps> = ({
   maxLength = 1000,
   disabled,
   remainingChars,
+  user,
   onValueChange,
   onSubmit,
   onCharCountChange,
@@ -43,6 +47,7 @@ const MaximizedTextArea: FC<MaximizedTextAreaProps> = ({
       <div className={clsx("fixed left-0 bottom-0 h-[94vh] w-full z-[200] bg-white flex flex-col rounded-[14px_14px_0_0]")}>
         <div className="h-[40px] w-full px-3 py-6 flex items-start justify-between font-bold">
           <MessageLengthCalculator remainingChars={remainingChars} />
+          <Credits user={user} />
           <button type="button" onClick={onClose}>
             <Minimize additionalClasses="cursor-pointer" width={16} height={16} />
           </button>

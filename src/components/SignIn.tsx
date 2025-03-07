@@ -40,12 +40,13 @@ const Signin: FC<signInProperties> = ({ onClose, onSuccessfulLogin }) => {
     });
 
     const {
-      user: { id, username },
+      user: { id, username, credits },
     } = await response.json();
     if (id && username) {
       setUser({
         id,
-          username,
+        username,
+        credits,
       });
     }
 

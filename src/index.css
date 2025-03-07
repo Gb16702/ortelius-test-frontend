@@ -23,6 +23,8 @@
   display: none;
 }
 
+/* Loader styling -> */
+
 .spinner {
   -webkit-animation: rotation 1.35s linear infinite;
   animation: rotation 1.35s linear infinite;
@@ -71,6 +73,8 @@
 .spinner:nth-child(1) {
   stroke: #fff;
 }
+
+/* Markdown styling -> */
 
 .prose {
   font-size: 14px;

@@ -6,7 +6,7 @@ const MessageLengthCalculator: FC<{ remainingChars: number }> = ({ remainingChar
     <div
       className={clsx("text-sm font-semibold", {
         "text-red-400": remainingChars <= 25,
-        "text-chat-text-primary": remainingChars >= 0,
+        "text-black": remainingChars >= 0,
       })}>
       {remainingChars}
     </div>

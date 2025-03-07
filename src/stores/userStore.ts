@@ -1,9 +1,10 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-type User = {
+export type User = {
   id: string;
   username: string;
+  credits: number;
 } | null;
 
 interface UserState {
